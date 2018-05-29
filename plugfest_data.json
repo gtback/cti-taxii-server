@@ -1,0 +1,12 @@
+{
+    "/discovery": {
+        "title": "Medallion Test Server",
+        "description": "A test server for the June 2018 CTI TC Plugfest",
+        "contact": "Greg Back (gback@mitre.org)",
+        "default": "/plugfest/",
+        "api_roots": [
+            "/plugfest/"
+        ]
+    },
+    "plugfest": {}
+}

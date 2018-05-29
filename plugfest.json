@@ -1,0 +1,11 @@
+{
+  "backend": {
+    "module": "medallion.backends.memory_backend",
+    "module_class": "MemoryBackend",
+    "filename": "plugfest_data.json"
+  },
+  "users": {
+    "admin": "gc7nPJNuN8(4%hDT9XQJjLrwn*?HtK",
+    "user": "XU.TFpP{X&DqrF3A[mtwpG8MDA3eu4"
+  }
+}
