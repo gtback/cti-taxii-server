@@ -2,9 +2,11 @@ import importlib
 import logging
 
 from flask import Flask, current_app
+import flask
 from flask_httpauth import HTTPBasicAuth
 
 from medallion.version import __version__  # noqa
+import medallion.views
 
 # Console Handler for medallion messages
 ch = logging.StreamHandler()
@@ -67,3 +69,12 @@ def register_blueprints(flask_application_instance):
         current_app.register_blueprint(discovery.mod)
         current_app.register_blueprint(manifest.mod)
         current_app.register_blueprint(objects.mod)
+
+
+def error(status_code, title):
+    data = {
+        'title': title,
+        'http_status': status_code,
+    }
+    return flask.Response(flask.json.dumps(data), status=status_code,
+                          mimetype=medallion.views.MEDIA_TYPE_TAXII_V20)

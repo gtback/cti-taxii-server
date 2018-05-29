@@ -1,9 +1,13 @@
-import flask
-from flask import Blueprint, Response, abort, current_app
+import logging
 
-from medallion import auth
+import flask
+from flask import Blueprint, Response, abort, current_app, request
+from six.moves.urllib.parse import urljoin
+
+from medallion import auth, error
 from medallion.views import MEDIA_TYPE_TAXII_V20
 
+logger = logging.getLogger(__name__)
 mod = Blueprint('discovery', __name__)
 
 
@@ -14,6 +18,16 @@ def get_server_discovery():
     # credentials on the server. The metadata returned might be different
     # depending upon the credentials.
     server_discovery = current_app.medallion_backend.server_discovery()
+
+    if not server_discovery or not server_discovery.get('title'):
+        return error(404, "No discovery information available")
+
+    # Allow the data to hold relative URLs so users can change the hostname/IP
+    # that medallion is listening on without updating the data.
+    if 'default' in server_discovery:
+        server_discovery['default'] = urljoin(request.host_url, server_discovery['default'])
+    if 'api_roots' in server_discovery:
+        server_discovery['api_roots'] = [urljoin(request.host_url, x) for x in server_discovery['api_roots']]
 
     return Response(response=flask.json.dumps(server_discovery), status=200, mimetype=MEDIA_TYPE_TAXII_V20)
 
